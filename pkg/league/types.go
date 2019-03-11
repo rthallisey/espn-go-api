@@ -1,9 +1,11 @@
 package league
 
 type League struct {
-	leagueID string
-	year string
-	seasonLength string
-	espnS2 string
-	swid string
+	LeagueID     int
+	SeasonID     int
+	SeasonLength int
+	Params       string
+	ESPNUrl      string
+	EspnS2       string
+	Swid         string
 }
