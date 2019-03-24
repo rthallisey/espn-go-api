@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/rthallisey/espn-go-api/pkg/api/v3/generated"
 )
 
 type LeagueV3 struct {
-	Data FFL
+	Data generated.FFL
 
 	LeagueID     int
 	SeasonID     int
