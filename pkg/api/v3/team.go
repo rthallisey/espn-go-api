@@ -4,10 +4,15 @@ import (
 	"github.com/rthallisey/espn-go-api/pkg/api/v3/generated"
 )
 
-type TeamV3 struct {
-	Data generated.FFL
+type Team struct {
+	generated.Teams
 }
 
-func (t TeamV3) TeamData() {
+func NewTeam(l *LeagueV3) (*Team, error) {
+	return &Team{generated.Teams{l.Data.Teams}}, nil
+}
 
+func (t *Team) TeamData() ([]string, error) {
+	var a []string
+	return a, nil
 }

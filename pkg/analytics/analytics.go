@@ -12,7 +12,12 @@ func Start(hc *espnv3.LeagueV3) error {
 		return err
 	}
 	fmt.Println(members)
-	// api.Team.TeamData()
+
+	teams, err := espnv3.NewTeam(hc)
+	if err != nil {
+		return err
+	}
+	teams.TeamData()
 
 	fmt.Println(hc.Data.DraftDetail.Drafted)
 	return nil
