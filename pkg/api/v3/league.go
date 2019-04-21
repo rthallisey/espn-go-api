@@ -2,6 +2,7 @@ package v3
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -48,11 +49,11 @@ func leagueUrl(l *LeagueV3) string {
 	return fmt.Sprintf("%s/%d/segments/0/leagues/%d?%s", l.ESPNUrl, l.SeasonID, l.LeagueID, l.Params)
 }
 
-func (l LeagueV3) LeagueMembers() ([]string, error) {
-	var s []string
+func (l LeagueV3) LeagueMembers() map[string]string {
+	members := make(map[string]string)
 	for _, i := range l.Data.Members {
-		s = append(s, fmt.Sprintf("%s %s", i.FirstName, i.LastName))
+		members[i.ID] = fmt.Sprintf("%s %s", i.FirstName, i.LastName)
 	}
 
-	return s, nil
+	return members
 }

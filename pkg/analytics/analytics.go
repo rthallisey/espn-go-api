@@ -7,18 +7,24 @@ import (
 )
 
 func Start(hc *espnv3.LeagueV3) error {
-	members, err := hc.LeagueMembers()
-	if err != nil {
-		return err
-	}
+	members := hc.LeagueMembers()
 	fmt.Println(members)
 
 	teams, err := espnv3.NewTeam(hc)
 	if err != nil {
 		return err
 	}
-	teams.TeamData()
+	rosters := teams.AllRosters()
+	for rosterID, _ := range rosters {
+		fmt.Println(members[rosterID])
 
-	fmt.Println(hc.Data.DraftDetail.Drafted)
+		r, err := teams.Roster(rosterID)
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			fmt.Println(r)
+		}
+	}
+
 	return nil
 }

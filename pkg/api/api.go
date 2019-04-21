@@ -5,5 +5,5 @@ type League interface {
 }
 
 type Team interface {
-	TeamData()
+	TeamRosters() map[string][]string
 }
