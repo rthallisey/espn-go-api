@@ -2,7 +2,6 @@ package v3
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -11,7 +10,7 @@ import (
 )
 
 type LeagueV3 struct {
-	Data generated.FFL
+	Data generated.League
 
 	LeagueID     int
 	SeasonID     int
