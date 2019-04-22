@@ -1,9 +1,10 @@
 package api
 
 type League interface {
-	LeagueMembers() ([]string, error)
+	LeagueMembers() map[string]string
 }
 
 type Team interface {
-	TeamRosters() map[string][]string
+	Roster(string) ([]string, error)
+	AllRosters() map[string][]string
 }
