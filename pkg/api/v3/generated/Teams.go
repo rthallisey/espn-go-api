@@ -509,7 +509,6 @@ type Teams struct {
 			TeamCharges  int64 `json:"teamCharges"`
 			Trades       int64 `json:"trades"`
 		} `json:"transactionCounter"`
-		WaiverRank int64   `json:"waiverRank"`
-		WatchList  []int64 `json:"watchList"`
+		WaiverRank int64 `json:"waiverRank"`
 	} `json:"teams"`
 }

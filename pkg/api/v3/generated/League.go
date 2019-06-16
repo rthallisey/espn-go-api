@@ -10,17 +10,13 @@ type League struct {
 	GameID  int64 `json:"gameId"`
 	ID      int64 `json:"id"`
 	Members []struct {
-		DisplayName          string `json:"displayName"`
-		FirstName            string `json:"firstName"`
-		ID                   string `json:"id"`
-		IsLeagueCreator      bool   `json:"isLeagueCreator"`
-		IsLeagueManager      bool   `json:"isLeagueManager"`
-		LastName             string `json:"lastName"`
-		NotificationSettings []struct {
-			Enabled bool   `json:"enabled"`
-			ID      string `json:"id"`
-			Type    string `json:"type"`
-		} `json:"notificationSettings"`
+		DisplayName          string        `json:"displayName"`
+		FirstName            string        `json:"firstName"`
+		ID                   string        `json:"id"`
+		IsLeagueCreator      bool          `json:"isLeagueCreator"`
+		IsLeagueManager      bool          `json:"isLeagueManager"`
+		LastName             string        `json:"lastName"`
+		NotificationSettings []interface{} `json:"notificationSettings"`
 	} `json:"members"`
 	Schedule []struct {
 		Away struct {
@@ -1534,7 +1530,6 @@ type League struct {
 			TeamCharges  int64 `json:"teamCharges"`
 			Trades       int64 `json:"trades"`
 		} `json:"transactionCounter"`
-		WaiverRank int64   `json:"waiverRank"`
-		WatchList  []int64 `json:"watchList"`
+		WaiverRank int64 `json:"waiverRank"`
 	} `json:"teams"`
 }
