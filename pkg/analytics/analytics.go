@@ -6,14 +6,26 @@ import (
 	"fmt"
 )
 
-func Start(hc *espnv3.LeagueV3) error {
-	members := hc.LeagueMembers()
-	fmt.Println(members)
+func Start(hc espnv3.LeagueV3, weekly []espnv3.LeagueV3) error {
 
-	teams, err := espnv3.NewTeam(hc)
+	members := hc.LeagueMembers()
+	membersAbbrev := hc.LeagueMembersAbbrev()
+
+	teams := espnv3.NewTeam(hc, weekly)
+	// schedules := espnv3.NewSchedule(hc)
+
+	weeklyPoints, err := teams.TeamWeeklyScore(membersAbbrev["GBL"])
 	if err != nil {
 		return err
 	}
+
+	for week, w := range weeklyPoints {
+		// Weeks aren't 0'd
+		fmt.Printf("Week %d\n", (week + 1))
+
+		fmt.Println(w)
+	}
+
 	rosters := teams.AllRosters()
 	for rosterID, _ := range rosters {
 		fmt.Println(members[rosterID])
@@ -25,6 +37,12 @@ func Start(hc *espnv3.LeagueV3) error {
 			fmt.Println(r)
 		}
 	}
+
+	// schedule, err := schedules.TeamID()
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Println(schedule)
 
 	return nil
 }

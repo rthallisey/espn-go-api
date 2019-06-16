@@ -10,42 +10,38 @@ import (
 )
 
 type LeagueV3 struct {
-	Data generated.League
+	Data *generated.League
 
-	LeagueID     int
-	SeasonID     int
-	SeasonLength int
-	Params       string
-	ESPNUrl      string
-	EspnS2       string
-	Swid         string
+	ScoreID int
 }
 
-func NewLeague(l *LeagueV3) error {
-	url := leagueUrl(l)
+func NewLeague(scoringPeriodID int, leagueID int, seasonID int, params string, espnUrl string) (LeagueV3, error) {
+	url := fmt.Sprintf("%s/%d/segments/0/leagues/%d?%s", espnUrl, seasonID, leagueID, params)
+
+	if scoringPeriodID > 0 {
+		url = fmt.Sprintf("%s&scoringPeriodId=%d", url, scoringPeriodID)
+	}
 
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return err
+		return LeagueV3{}, err
 	}
 
 	resp, err := client.Do(req)
 	if err != nil {
-		return err
+		return LeagueV3{}, err
 	}
 
 	bodyText, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return err
+		return LeagueV3{}, err
 	}
-	json.Unmarshal(bodyText, &l.Data)
 
-	return nil
-}
+	d := &generated.League{}
+	json.Unmarshal(bodyText, d)
 
-func leagueUrl(l *LeagueV3) string {
-	return fmt.Sprintf("%s/%d/segments/0/leagues/%d?%s", l.ESPNUrl, l.SeasonID, l.LeagueID, l.Params)
+	return LeagueV3{Data: d, ScoreID: scoringPeriodID}, nil
 }
 
 func (l LeagueV3) LeagueMembers() map[string]string {
@@ -55,4 +51,24 @@ func (l LeagueV3) LeagueMembers() map[string]string {
 	}
 
 	return members
+}
+
+// Return IDs pairs with team abbreviations.
+// Abbreviations are more reliatble human readable IDs.
+func (l LeagueV3) LeagueMembersAbbrev() map[string]string {
+	members := make(map[string]string)
+
+	for _, i := range l.Data.Members {
+		for _, j := range l.Data.Teams {
+			if j.PrimaryOwner == i.ID {
+				members[j.Abbrev] = i.ID
+			}
+		}
+	}
+
+	return members
+}
+
+func (l LeagueV3) IsPublic() bool {
+	return l.Data.Status.IsViewable
 }

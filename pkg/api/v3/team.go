@@ -8,11 +8,18 @@ import (
 )
 
 type Team struct {
+	GeneratedList []generated.Teams
+
 	Generated generated.Teams
 }
 
-func NewTeam(l *LeagueV3) (*Team, error) {
-	return &Team{Generated: generated.Teams{l.Data.Teams}}, nil
+func NewTeam(l LeagueV3, leagueList []LeagueV3) *Team {
+	teamList := []generated.Teams{}
+	for _, league := range leagueList {
+		teamList = append(teamList, generated.Teams{league.Data.Teams})
+	}
+
+	return &Team{Generated: generated.Teams{l.Data.Teams}, GeneratedList: teamList}
 }
 
 func (t *Team) Roster(id string) ([]string, error) {
@@ -41,4 +48,68 @@ func (t *Team) AllRosters() map[string][]string {
 	}
 
 	return roster
+}
+
+// TODO: add a Roster object to re use roster check code
+
+type playerPoints struct {
+	projectedPoints float64
+	score           float64
+	seasonAverage   float64
+}
+
+func (t *Team) TeamWeeklyScore(id string) ([]map[string]playerPoints, error) {
+	weekly := []map[string]playerPoints{}
+
+	// Loop through each week
+	for w, week := range t.GeneratedList {
+		// Weeks aren't 0'd
+		w += 1
+
+		// Loop through each team
+		for _, team := range week.Teams {
+
+			// Match team owner with their team
+			//
+			// **This has no check to verify a team was found**
+			// errors.New(fmt.Sprintf("The teams with ID %s is not in the league", id))
+			if id == team.PrimaryOwner {
+
+				points := map[string]playerPoints{}
+
+				// Loop through players on their roster
+				for _, player := range team.Roster.Entries {
+
+					trackPoints := playerPoints{}
+
+					// Loop through a player's stats and find pts scored
+					//   Projected points for a week:
+					//       appliedTotal
+					//       statSourceId = 1
+					//       statSplitId  = 1
+					//   Scored points for a week:
+					//       appliedTotal
+					//       statSourceId = 0
+					//       statSplitId  = 1
+					//   Average points for the season:
+					//       appliedAverage
+					//       statSourceId = 0
+					//       statSplitId  = 0
+					for _, statSource := range player.PlayerPoolEntry.Player.Stats {
+						if statSource.StatSourceID == 1 && statSource.StatSplitTypeID == 1 && int(statSource.ScoringPeriodID) == w {
+							trackPoints.projectedPoints = statSource.AppliedTotal
+
+						} else if statSource.StatSourceID == 0 && statSource.StatSplitTypeID == 1 && int(statSource.ScoringPeriodID) == w {
+							trackPoints.score = statSource.AppliedTotal
+						} else if statSource.StatSourceID == 0 && statSource.StatSplitTypeID == 0 {
+							trackPoints.seasonAverage = statSource.AppliedAverage
+						}
+					}
+					points[player.PlayerPoolEntry.Player.FullName] = trackPoints
+				}
+				weekly = append(weekly, points)
+			}
+		}
+	}
+	return weekly, nil
 }
