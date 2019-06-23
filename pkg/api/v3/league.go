@@ -54,7 +54,7 @@ func (l LeagueV3) LeagueMembers() map[string]string {
 }
 
 // Return IDs pairs with team abbreviations.
-// Abbreviations are more reliatble human readable IDs.
+// Abbreviations are more human readable.
 func (l LeagueV3) LeagueMembersAbbrev() map[string]string {
 	members := make(map[string]string)
 
@@ -64,6 +64,17 @@ func (l LeagueV3) LeagueMembersAbbrev() map[string]string {
 				members[j.Abbrev] = i.ID
 			}
 		}
+	}
+
+	return members
+}
+
+// Return IDs pairs with team IDs.
+func (l LeagueV3) LeagueMembersID() map[string]int {
+	members := make(map[string]int)
+
+	for _, i := range l.Data.Teams {
+		members[i.PrimaryOwner] = int(i.ID)
 	}
 
 	return members

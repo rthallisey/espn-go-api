@@ -14,9 +14,12 @@ type Team interface {
 
 	// Get a team's roster
 	Roster(string) ([]string, error)
-}x
+}
 
 type Schedule interface {
-	// Get teamID on the schedule
-	TeamID() ([]string, error)
+	// Get a team with match id's total score for each week
+	TeamScore(int) ([]float64, error)
+
+	TeamWinLoss(int) ([]string, error)
+	TeamOpponent(int) ([]int, error)
 }
