@@ -63,7 +63,7 @@ func getWeeklyData(l league) ([]espnv3.LeagueV3, error) {
 	weekly := []espnv3.LeagueV3{}
 
 	// seasonLen +2 to cover 2 playoff rounds.  This may not always work
-	for week := 1; week < l.seasonLength+2; week++ {
+	for week := 1; week <= l.seasonLength+2; week++ {
 		fmt.Printf("Gathering week %d data...\n", week)
 
 		hc, err := espnv3.NewLeague(week, l.leagueID, l.seasonID, l.params, l.espnUrl)
