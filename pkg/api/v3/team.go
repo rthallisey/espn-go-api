@@ -52,13 +52,94 @@ func (t Team) AllRosters() map[string][]string {
 
 // TODO: add a Roster object to re use roster check code
 
+const WideReceiver = "WR"
+const RunningBack = "RB"
+const QuarterBack = "QB"
+const TightEnd = "TE"
+const Kicker = "K"
+const Defense = "DEF"
+
+func (t Team) PositionList() []string {
+	return []string{WideReceiver, RunningBack, QuarterBack, TightEnd, Kicker, Defense}
+}
+
+func (t Team) PositionStringToID(pos string) (int, error) {
+	switch pos {
+	case RunningBack:
+		return 2, nil
+	case WideReceiver:
+		return 3, nil
+	case QuarterBack:
+		return 1, nil
+	case TightEnd:
+		return 4, nil
+	case Kicker:
+		return 5, nil
+	case Defense:
+		return 16, nil
+	default:
+		return 0, errors.New(fmt.Sprintf("Position %s does not exist. Valid positions: %v", pos, t.PositionList()))
+	}
+}
+
+// Average score for position of players who were rostered for a week
+func (t Team) AvgPosScore(posID int) float64 {
+	p := map[string]int{}
+	var count float64
+	var avg float64
+
+	for _, team := range t.Generated.Teams {
+		s, err := t.PlayerWeeklyScore(team.PrimaryOwner)
+		if err != nil {
+			return 0
+		}
+		// Loop through each week
+		for _, week := range s {
+			for player, pts := range week {
+				// Verify the player's position
+				if pts.DefaultPositionID == posID {
+					// Only tally a player's avg that hasn't been seen yet
+					if _, ok := p[player]; !ok {
+						p[player] = 0
+						count += 1
+						avg += pts.seasonAverage
+					}
+				}
+			}
+		}
+	}
+	return avg / count
+}
+
 type playerPoints struct {
+	Score float64
+
+	// The default place where a player is played e.g. WR
+	DefaultPositionID int
+
 	projectedPoints float64
-	Score           float64
 	seasonAverage   float64
 }
 
-// Players and their scores for a wekk
+type record struct {
+	Wins   int
+	Losses int
+}
+
+// Get a team's record
+func (t Team) TeamRecord(id string) (record, error) {
+	teamRecord := record{}
+	for _, r := range t.Generated.Teams {
+		if id == r.PrimaryOwner {
+			teamRecord.Losses = int(r.Record.Overall.Losses)
+			teamRecord.Wins = int(r.Record.Overall.Wins)
+			return teamRecord, nil
+		}
+	}
+	return record{}, errors.New(fmt.Sprintf("The teams with ID %s is not in the league", id))
+}
+
+// Players and their scores for a specific week
 func (t Team) PlayerWeekScore(id string, week int) (map[string]playerPoints, error) {
 	points := map[string]playerPoints{}
 
@@ -75,6 +156,9 @@ func (t Team) PlayerWeekScore(id string, week int) (map[string]playerPoints, err
 			for _, player := range team.Roster.Entries {
 
 				trackPoints := playerPoints{}
+
+				// Register a players default position ID
+				trackPoints.DefaultPositionID = int(player.PlayerPoolEntry.Player.DefaultPositionID)
 
 				// Loop through a player's stats and find pts scored
 				//   Projected points for a week:
@@ -107,13 +191,12 @@ func (t Team) PlayerWeekScore(id string, week int) (map[string]playerPoints, err
 	return nil, errors.New(fmt.Sprintf("The teams with ID %s is not in the league", id))
 }
 
+// Player scores for each week from a specific team
 func (t Team) PlayerWeeklyScore(id string) ([]map[string]playerPoints, error) {
 	weekly := []map[string]playerPoints{}
 
 	// Loop through each week
 	for w, _ := range t.GeneratedList {
-		// Weeks aren't 0'd
-		w += 1
 		weekScore, err := t.PlayerWeekScore(id, w)
 		if err != nil {
 			return nil, err
