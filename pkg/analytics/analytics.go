@@ -33,13 +33,12 @@ func Start(hc espnv3.LeagueV3, weekly []espnv3.LeagueV3) error {
 			return err
 		}
 
-		fmt.Printf("Total MVPs: %d\n", count)
+		fmt.Printf("Number of players with MVPs: %d\n", count)
 		fmt.Printf("Total wins: %v\n", record.Wins)
 		avgMVP := float64(mvpSum) / float64(record.Wins)
 		fmt.Printf("Average MVPs per win: %v\n", avgMVP)
-		fmt.Printf("MVPs Per win: %v\n", float64(count)/float64(record.Wins))
-		fmt.Printf("Normalized MVPs Per win: %v\n\n", float64(count)/float64(record.Wins)*float64(record.Wins))
-
+		fmt.Printf("MVPs Per win: %v\n", float64(mvpSum)/float64(record.Wins))
+		fmt.Printf("Normalized MVPs Per win: %v\n\n", float64(mvpSum)/float64(record.Wins)*float64(record.Wins)+float64(count)-float64(record.Wins))
 	}
 
 	for _, pos := range teams.PositionList() {
@@ -98,7 +97,7 @@ func FindEveryTeamMVP(schedule espnv3.Schedule, teams espnv3.Team, l espnv3.Leag
 				}
 
 				for player, pts := range playerWeekPoints {
-					if pts.Score > diff && pts.Score > posAVG[pts.DefaultPositionID] {
+					if !pts.Bench && pts.Score > diff && pts.Score > posAVG[pts.DefaultPositionID] {
 						mvp[uuid][player] += 1
 					}
 				}

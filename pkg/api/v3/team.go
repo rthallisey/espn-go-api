@@ -117,6 +117,12 @@ type playerPoints struct {
 	// The default place where a player is played e.g. WR
 	DefaultPositionID int
 
+	// Player was on the bench
+	Bench bool
+
+	// Drafted, Added, Traded for
+	AcquisitionType string
+
 	projectedPoints float64
 	seasonAverage   float64
 }
@@ -174,9 +180,16 @@ func (t Team) PlayerWeekScore(id string, week int) (map[string]playerPoints, err
 				//       statSourceId = 0
 				//       statSplitId  = 0
 				for _, statSource := range player.PlayerPoolEntry.Player.Stats {
+					trackPoints.AcquisitionType = player.AcquisitionType
+
+					if player.LineupSlotID == 20 {
+						trackPoints.Bench = true
+					} else {
+						trackPoints.Bench = false
+					}
+
 					if statSource.StatSourceID == 1 && statSource.StatSplitTypeID == 1 && int(statSource.ScoringPeriodID) == week {
 						trackPoints.projectedPoints = statSource.AppliedTotal
-
 					} else if statSource.StatSourceID == 0 && statSource.StatSplitTypeID == 1 && int(statSource.ScoringPeriodID) == week {
 						trackPoints.Score = statSource.AppliedTotal
 					} else if statSource.StatSourceID == 0 && statSource.StatSplitTypeID == 0 {
