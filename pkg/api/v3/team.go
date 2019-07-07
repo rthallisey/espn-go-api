@@ -264,3 +264,31 @@ func (t Team) PlayerWeeklyScore(id string) ([]map[string]playerPoints, error) {
 	}
 	return weekly, nil
 }
+
+func (t Team) TeamPlayerMostPoints(uuid string) (string, float64) {
+	playerPoints := make(map[string]float64)
+	var highestScorer string
+	var highestScore float64
+
+	s, err := t.PlayerWeeklyScore(uuid)
+	if err != nil {
+		fmt.Println(err)
+		return "", 0
+	}
+
+	// Loop through each week
+	for _, week := range s {
+		for player, pts := range week {
+			// Only count players in play
+			if !pts.Bench {
+				playerPoints[player] += pts.Score
+				if playerPoints[player] > highestScore {
+					highestScorer = player
+					highestScore = playerPoints[player]
+				}
+			}
+		}
+	}
+
+	return highestScorer, highestScore
+}

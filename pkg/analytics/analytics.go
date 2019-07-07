@@ -19,6 +19,7 @@ func Start(hc espnv3.LeagueV3, weekly []espnv3.LeagueV3) error {
 	}
 
 	benchPoints(teams, hc)
+	fmt.Printf("\n")
 
 	for _, team := range teams.Generated.Teams {
 		for _, pos := range teams.PositionList() {
@@ -26,7 +27,11 @@ func Start(hc espnv3.LeagueV3, weekly []espnv3.LeagueV3) error {
 			posAVG := teams.TeamAvgPosScore(team.PrimaryOwner, p)
 			fmt.Printf("Team %s average poinsts for position %s: %v\n", members[team.PrimaryOwner], pos, posAVG)
 		}
+		fmt.Printf("\n")
 	}
+
+	teamPlayerMostPoints(teams, hc)
+	fmt.Printf("\n")
 
 	for _, pos := range teams.PositionList() {
 		p, _ := teams.PositionStringToID(pos)
@@ -118,4 +123,15 @@ func benchPoints(teams espnv3.Team, hc espnv3.LeagueV3) {
 		}
 		fmt.Printf("Team %s Bench Points: %v\n", members[team.PrimaryOwner], benchPts)
 	}
+}
+
+func teamPlayerMostPoints(teams espnv3.Team, hc espnv3.LeagueV3) {
+	members := hc.LeagueMembers()
+
+	for _, team := range teams.Generated.Teams {
+		highestScorer, highestScore := teams.TeamPlayerMostPoints(team.PrimaryOwner)
+
+		fmt.Printf("Team %s highest scorer is %s with %v points\n", members[team.PrimaryOwner], highestScorer, highestScore)
+	}
+
 }
