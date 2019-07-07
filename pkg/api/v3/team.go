@@ -82,25 +82,51 @@ func (t Team) PositionStringToID(pos string) (int, error) {
 	}
 }
 
-// Average score for position of players who were rostered for a week
-func (t Team) AvgPosScore(posID int) float64 {
-	p := map[string]int{}
+// TeamAvgPosScore - Team's average position score.  Only count points when player was played
+func (t Team) TeamAvgPosScore(uuid string, posID int) float64 {
 	var count float64
 	var avg float64
+
+	s, err := t.PlayerWeeklyScore(uuid)
+	if err != nil {
+		fmt.Println(err)
+		return 0
+	}
+
+	// Loop through each week
+	for _, week := range s {
+		for _, pts := range week {
+			// Verify the player's position and skip bench points
+			if pts.DefaultPositionID == posID && !pts.Bench {
+				count += 1
+				avg += pts.Score
+			}
+		}
+	}
+
+	return avg / count
+}
+
+// AvgPosScore - Average score for position of players who were rostered for a week
+func (t Team) AvgPosScore(posID int) float64 {
+	var avg, count float64
+	duplicate := map[string]int{}
 
 	for _, team := range t.Generated.Teams {
 		s, err := t.PlayerWeeklyScore(team.PrimaryOwner)
 		if err != nil {
+			fmt.Println(err)
 			return 0
 		}
+
 		// Loop through each week
 		for _, week := range s {
 			for player, pts := range week {
 				// Verify the player's position
 				if pts.DefaultPositionID == posID {
 					// Only tally a player's avg that hasn't been seen yet
-					if _, ok := p[player]; !ok {
-						p[player] = 0
+					if _, ok := duplicate[player]; !ok {
+						duplicate[player] = 0
 						count += 1
 						avg += pts.seasonAverage
 					}
@@ -109,27 +135,6 @@ func (t Team) AvgPosScore(posID int) float64 {
 		}
 	}
 	return avg / count
-}
-
-type playerPoints struct {
-	Score float64
-
-	// The default place where a player is played e.g. WR
-	DefaultPositionID int
-
-	// Player was on the bench
-	Bench bool
-
-	// Drafted, Added, Traded for
-	AcquisitionType string
-
-	projectedPoints float64
-	seasonAverage   float64
-}
-
-type record struct {
-	Wins   int
-	Losses int
 }
 
 // Get a team's record
