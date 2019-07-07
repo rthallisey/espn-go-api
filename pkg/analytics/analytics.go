@@ -68,42 +68,21 @@ type scoreLoss struct {
 }
 
 func FindEveryTeamMVP(schedule espnv3.Schedule, teams espnv3.Team, l espnv3.LeagueV3) (map[string]map[string]int, error) {
-	membersID := l.LeagueMembersID()
-
-	// mvp['team uuid']['player']
 	mvp := map[string]map[string]int{}
 
-	posAVG := map[int]float64{}
-	for _, pos := range teams.PositionList() {
-		p, _ := teams.PositionStringToID(pos)
-		posAVG[p] = teams.AvgPosScore(p)
-	}
-
-	// Winner is the key for sl values
-	for game, _ := range schedule.Generated.Schedule {
-		//winner, diff, loser
-		winner, diff, _ := schedule.GameWinLossScore(game)
-
-		w := schedule.GameToWeek(game)
-		for uuid, id := range membersID {
-			if _, ok := mvp[uuid]; !ok {
-				mvp[uuid] = map[string]int{}
-			}
-			if id == winner {
-				//fmt.Printf("TEAM %v won over TEAM %v by %v points\n", id, loser, diff)
-				playerWeekPoints, err := teams.PlayerWeekScore(uuid, w)
-				if err != nil {
-					return nil, err
-				}
-
-				for player, pts := range playerWeekPoints {
-					if !pts.Bench && pts.Score > diff && pts.Score > posAVG[pts.DefaultPositionID] {
-						mvp[uuid][player] += 1
-					}
-				}
-			}
+	for _, team := range teams.Generated.Teams {
+		if _, ok := mvp[team.PrimaryOwner]; !ok {
+			mvp[team.PrimaryOwner] = map[string]int{}
 		}
-	}
 
+		// winScore -> [teamID][]scoreDiff
+		winScore := schedule.TeamGameWinScore(int(team.ID))
+
+		data, err := teams.TeamMVP(int(team.ID), winScore[int(team.ID)])
+		if err != nil {
+			return nil, err
+		}
+		mvp[team.PrimaryOwner] = data
+	}
 	return mvp, nil
 }

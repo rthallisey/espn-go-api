@@ -145,8 +145,49 @@ func (t Team) TeamRecord(id string) (record, error) {
 	return record{}, errors.New(fmt.Sprintf("The teams with ID %s is not in the league", id))
 }
 
+// TeamMVP - Find a team's MVPs and return
+func (t Team) TeamMVP(teamID int, weeksWonScore []scoreDiff) (map[string]int, error) {
+	// mvp['player']
+	mvp := map[string]int{}
+
+	// Optimization: Would be nice to have posAVG shared
+	posAVG := map[int]float64{}
+	for _, pos := range t.PositionList() {
+		p, _ := t.PositionStringToID(pos)
+		posAVG[p] = t.AvgPosScore(p)
+	}
+
+	var uuid string
+	for _, r := range t.Generated.Teams {
+		if teamID == int(r.ID) {
+			uuid = r.PrimaryOwner
+			break
+		}
+	}
+	if uuid == "" {
+		return nil, errors.New(fmt.Sprintf("The team with teamID %v is not in the league", teamID))
+	}
+
+	for _, score := range weeksWonScore {
+		playerWeekPoints, err := t.PlayerWeekScore(uuid, score.scoringPeriodID)
+		if err != nil {
+			return nil, err
+		}
+
+		for player, pts := range playerWeekPoints {
+			// Player was not on the bench
+			// Player scored more than Position Avg
+			// Player scored enough to win the game
+			if !pts.Bench && pts.Score > score.difference && pts.Score > posAVG[pts.DefaultPositionID] {
+				mvp[player] += 1
+			}
+		}
+	}
+	return mvp, nil
+}
+
 // Players and their scores for a specific week
-func (t Team) PlayerWeekScore(id string, week int) (map[string]playerPoints, error) {
+func (t Team) PlayerWeekScore(uuid string, week int) (map[string]playerPoints, error) {
 	points := map[string]playerPoints{}
 
 	// Loop through each team
@@ -155,8 +196,8 @@ func (t Team) PlayerWeekScore(id string, week int) (map[string]playerPoints, err
 		// Match team owner with their team
 		//
 		// **This has no check to verify a team was found**
-		// errors.New(fmt.Sprintf("The teams with ID %s is not in the league", id))
-		if id == team.PrimaryOwner {
+		// errors.New(fmt.Sprintf("The teams with ID %s is not in the league", uuid))
+		if uuid == team.PrimaryOwner {
 
 			// Loop through players on their roster
 			for _, player := range team.Roster.Entries {
@@ -201,7 +242,7 @@ func (t Team) PlayerWeekScore(id string, week int) (map[string]playerPoints, err
 			return points, nil
 		}
 	}
-	return nil, errors.New(fmt.Sprintf("The teams with ID %s is not in the league", id))
+	return nil, errors.New(fmt.Sprintf("The teams with ID %s is not in the league", uuid))
 }
 
 // Player scores for each week from a specific team
