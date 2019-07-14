@@ -22,10 +22,13 @@ func Start(hc espnv3.LeagueV3, weekly []espnv3.LeagueV3) error {
 	fmt.Printf("\n")
 
 	for _, team := range teams.Generated.Teams {
+		exportAvgPosScoreData := map[string]float64{}
 		for _, pos := range teams.PositionList() {
 			p, _ := teams.PositionStringToID(pos)
 			posAVG := teams.TeamAvgPosScore(team.PrimaryOwner, p)
-			fmt.Printf("Team %s average poinsts for position %s: %v\n", members[team.PrimaryOwner], pos, posAVG)
+			fmt.Printf("Team %s average points for position %s: %v\n", members[team.PrimaryOwner], pos, posAVG)
+			exportAvgPosScoreData[pos] = posAVG
+			MapStringFloatToJson("TeamAvgPtsPerPosition/"+members[team.PrimaryOwner]+" pos.json", exportAvgPosScoreData)
 		}
 		fmt.Printf("\n")
 	}
@@ -78,6 +81,10 @@ func findEveryTeamMVP(schedule espnv3.Schedule, teams espnv3.Team, l espnv3.Leag
 		mvp[team.PrimaryOwner] = data
 	}
 
+	exportCountData := map[string]int{}
+	exportAvgMVPData := map[string]float64{}
+	exportMVPPerWinData := map[string]float64{}
+	exportNormMVPData := map[string]float64{}
 	for id, t := range mvp {
 		fmt.Printf("Team %s MVPs\n", members[id])
 		count := 0
@@ -94,17 +101,34 @@ func findEveryTeamMVP(schedule espnv3.Schedule, teams espnv3.Team, l espnv3.Leag
 		}
 
 		fmt.Printf("Number of players with MVPs: %d\n", count)
+		exportCountData[members[id]] = count
+
 		fmt.Printf("Total wins: %v\n", record.Wins)
 		avgMVP := float64(mvpSum) / float64(record.Wins)
 		fmt.Printf("Average MVPs per win: %v\n", avgMVP)
-		fmt.Printf("MVPs Per win: %v\n", float64(mvpSum)/float64(record.Wins))
-		fmt.Printf("Normalized MVPs Per win: %v\n\n", float64(mvpSum)/float64(record.Wins)*float64(record.Wins)+float64(count)-float64(record.Wins))
+		exportAvgMVPData[members[id]] = avgMVP
+
+		mvpsPerWin := float64(mvpSum) / float64(record.Wins)
+		fmt.Printf("MVPs Per win: %v\n", mvpsPerWin)
+		exportMVPPerWinData[members[id]] = mvpsPerWin
+
+		normMvpsPerWin := float64(mvpSum)/float64(record.Wins)*float64(record.Wins) + float64(count) - float64(record.Wins)
+		fmt.Printf("Normalized MVPs Per win: %v\n\n", normMvpsPerWin)
+		exportNormMVPData[members[id]] = normMvpsPerWin
 	}
+
+	MapStringIntToJson("MVPCount.json", exportCountData)
+	MapStringFloatToJson("AvgMVPs.json", exportAvgMVPData)
+	MapStringFloatToJson("MVPsPerWin.json", exportMVPPerWinData)
+	MapStringFloatToJson("NormalizedMVPsPerWin.json", exportNormMVPData)
+
 	return nil
 }
 
 func benchPoints(teams espnv3.Team, hc espnv3.LeagueV3) {
 	members := hc.LeagueMembers()
+
+	exportData := map[string]float64{}
 
 	for _, team := range teams.Generated.Teams {
 		benchPts := 0.0
@@ -122,16 +146,21 @@ func benchPoints(teams espnv3.Team, hc espnv3.LeagueV3) {
 			}
 		}
 		fmt.Printf("Team %s Bench Points: %v\n", members[team.PrimaryOwner], benchPts)
+		exportData[members[team.PrimaryOwner]] = benchPts
 	}
+	MapStringFloatToJson("BenchPoints.json", exportData)
 }
 
 func teamPlayerMostPoints(teams espnv3.Team, hc espnv3.LeagueV3) {
 	members := hc.LeagueMembers()
 
 	for _, team := range teams.Generated.Teams {
+		exportData := map[string]float64{}
 		highestScorer, highestScore := teams.TeamPlayerMostPoints(team.PrimaryOwner)
 
 		fmt.Printf("Team %s highest scorer is %s with %v points\n", members[team.PrimaryOwner], highestScorer, highestScore)
+		exportData[highestScorer] = highestScore
+		MapStringFloatToJson("playerMostPoints/"+members[team.PrimaryOwner]+" HighestScorer.json", exportData)
 	}
 
 }
