@@ -34,12 +34,12 @@ type Schedule struct {
 					PendingTransactionIds interface{} `json:"pendingTransactionIds"`
 					PlayerID              int64       `json:"playerId"`
 					PlayerPoolEntry       struct {
-						AppliedStatTotal  float64 `json:"appliedStatTotal"`
-						ID                int64   `json:"id"`
-						KeeperValue       int64   `json:"keeperValue"`
-						KeeperValueFuture int64   `json:"keeperValueFuture"`
-						LineupLocked      bool    `json:"lineupLocked"`
-						OnTeamID          int64   `json:"onTeamId"`
+						AppliedStatTotal  int64 `json:"appliedStatTotal"`
+						ID                int64 `json:"id"`
+						KeeperValue       int64 `json:"keeperValue"`
+						KeeperValueFuture int64 `json:"keeperValueFuture"`
+						LineupLocked      bool  `json:"lineupLocked"`
+						OnTeamID          int64 `json:"onTeamId"`
 						Player            struct {
 							Active               bool  `json:"active"`
 							DefaultPositionID    int64 `json:"defaultPositionId"`
@@ -201,83 +201,73 @@ type Schedule struct {
 							} `json:"rankings"`
 							Stats []struct {
 								AppliedStats struct {
-									One01  float64 `json:"101"`
-									One02  float64 `json:"102"`
-									One03  float64 `json:"103"`
-									One04  float64 `json:"104"`
+									One03  int64   `json:"103"`
+									One04  int64   `json:"104"`
 									One23  int64   `json:"123"`
 									One28  int64   `json:"128"`
 									One29  int64   `json:"129"`
 									One30  int64   `json:"130"`
 									One32  int64   `json:"132"`
-									One9   float64 `json:"19"`
-									Two0   float64 `json:"20"`
+									Two0   int64   `json:"20"`
 									Two06  int64   `json:"206"`
 									Two4   float64 `json:"24"`
-									Two5   float64 `json:"25"`
-									Two6   float64 `json:"26"`
+									Two5   int64   `json:"25"`
+									Two6   int64   `json:"26"`
 									Three  float64 `json:"3"`
-									Four   float64 `json:"4"`
+									Four   int64   `json:"4"`
 									Four2  float64 `json:"42"`
-									Four3  float64 `json:"43"`
-									Four4  float64 `json:"44"`
-									Five3  float64 `json:"53"`
-									Six3   float64 `json:"63"`
-									Seven2 float64 `json:"72"`
-									Seven4 float64 `json:"74"`
-									Seven7 float64 `json:"77"`
-									Eight0 float64 `json:"80"`
-									Eight5 float64 `json:"85"`
-									Eight6 float64 `json:"86"`
+									Four3  int64   `json:"43"`
+									Four4  int64   `json:"44"`
+									Five3  int64   `json:"53"`
+									Seven2 int64   `json:"72"`
+									Seven4 int64   `json:"74"`
+									Seven7 int64   `json:"77"`
+									Eight0 int64   `json:"80"`
+									Eight5 int64   `json:"85"`
+									Eight6 int64   `json:"86"`
 									Eight9 int64   `json:"89"`
 									Nine1  int64   `json:"91"`
 									Nine2  int64   `json:"92"`
-									Nine3  float64 `json:"93"`
-									Nine5  float64 `json:"95"`
-									Nine6  float64 `json:"96"`
-									Nine7  float64 `json:"97"`
-									Nine8  float64 `json:"98"`
-									Nine9  float64 `json:"99"`
+									Nine5  int64   `json:"95"`
+									Nine6  int64   `json:"96"`
+									Nine9  int64   `json:"99"`
 								} `json:"appliedStats"`
-								AppliedTotal    float64 `json:"appliedTotal"`
-								ID              string  `json:"id"`
-								ProTeamID       int64   `json:"proTeamId"`
-								ScoringPeriodID int64   `json:"scoringPeriodId"`
-								SeasonID        int64   `json:"seasonId"`
-								StatSourceID    int64   `json:"statSourceId"`
-								StatSplitTypeID int64   `json:"statSplitTypeId"`
+								AppliedTotal    int64  `json:"appliedTotal"`
+								ID              string `json:"id"`
+								ProTeamID       int64  `json:"proTeamId"`
+								ScoringPeriodID int64  `json:"scoringPeriodId"`
+								SeasonID        int64  `json:"seasonId"`
+								StatSourceID    int64  `json:"statSourceId"`
+								StatSplitTypeID int64  `json:"statSplitTypeId"`
 								Stats           struct {
-									Zero   float64 `json:"0"`
-									One    float64 `json:"1"`
+									Zero   int64   `json:"0"`
+									One    int64   `json:"1"`
 									One0   int64   `json:"10"`
 									One00  int64   `json:"100"`
-									One01  float64 `json:"101"`
-									One02  float64 `json:"102"`
-									One03  float64 `json:"103"`
-									One04  float64 `json:"104"`
-									One05  float64 `json:"105"`
-									One06  float64 `json:"106"`
+									One03  int64   `json:"103"`
+									One04  int64   `json:"104"`
+									One05  int64   `json:"105"`
+									One06  int64   `json:"106"`
 									One07  int64   `json:"107"`
 									One08  int64   `json:"108"`
 									One09  int64   `json:"109"`
 									One1   int64   `json:"11"`
 									One10  int64   `json:"110"`
 									One11  int64   `json:"111"`
-									One12  float64 `json:"112"`
-									One13  float64 `json:"113"`
-									One14  float64 `json:"114"`
-									One15  float64 `json:"115"`
+									One12  int64   `json:"112"`
+									One13  int64   `json:"113"`
+									One14  int64   `json:"114"`
+									One15  int64   `json:"115"`
 									One16  int64   `json:"116"`
 									One17  int64   `json:"117"`
 									One18  int64   `json:"118"`
 									One19  int64   `json:"119"`
 									One2   int64   `json:"12"`
-									One20  float64 `json:"120"`
-									One21  int64   `json:"121"`
+									One20  int64   `json:"120"`
 									One22  int64   `json:"122"`
 									One23  int64   `json:"123"`
 									One26  int64   `json:"126"`
-									One27  float64 `json:"127"`
+									One27  int64   `json:"127"`
 									One28  int64   `json:"128"`
 									One29  int64   `json:"129"`
 									One3   int64   `json:"13"`
@@ -286,46 +276,38 @@ type Schedule struct {
 									One32  int64   `json:"132"`
 									One37  int64   `json:"137"`
 									One4   int64   `json:"14"`
-									One5   float64 `json:"15"`
+									One5   int64   `json:"15"`
 									One55  int64   `json:"155"`
 									One56  int64   `json:"156"`
-									One6   float64 `json:"16"`
-									One60  float64 `json:"160"`
-									One7   float64 `json:"17"`
-									One8   float64 `json:"18"`
-									One9   float64 `json:"19"`
-									Two    float64 `json:"2"`
-									Two0   float64 `json:"20"`
+									One7   int64   `json:"17"`
+									One8   int64   `json:"18"`
+									Two    int64   `json:"2"`
+									Two0   int64   `json:"20"`
 									Two05  int64   `json:"205"`
 									Two06  int64   `json:"206"`
 									Two1   float64 `json:"21"`
 									Two2   int64   `json:"22"`
-									Two3   float64 `json:"23"`
-									Two4   float64 `json:"24"`
-									Two5   float64 `json:"25"`
-									Two6   float64 `json:"26"`
+									Two3   int64   `json:"23"`
+									Two4   int64   `json:"24"`
+									Two5   int64   `json:"25"`
+									Two6   int64   `json:"26"`
 									Two7   int64   `json:"27"`
 									Two8   int64   `json:"28"`
 									Two9   int64   `json:"29"`
-									Three  float64 `json:"3"`
+									Three  int64   `json:"3"`
 									Three0 int64   `json:"30"`
 									Three1 int64   `json:"31"`
 									Three2 int64   `json:"32"`
 									Three3 int64   `json:"33"`
 									Three4 int64   `json:"34"`
-									Three5 float64 `json:"35"`
-									Three6 float64 `json:"36"`
-									Three7 float64 `json:"37"`
-									Three8 int64   `json:"38"`
-									Three9 float64 `json:"39"`
-									Four   float64 `json:"4"`
+									Three7 int64   `json:"37"`
+									Three9 int64   `json:"39"`
+									Four   int64   `json:"4"`
 									Four0  int64   `json:"40"`
-									Four1  float64 `json:"41"`
-									Four2  float64 `json:"42"`
-									Four3  float64 `json:"43"`
-									Four4  float64 `json:"44"`
-									Four5  float64 `json:"45"`
-									Four6  float64 `json:"46"`
+									Four1  int64   `json:"41"`
+									Four2  int64   `json:"42"`
+									Four3  int64   `json:"43"`
+									Four4  int64   `json:"44"`
 									Four7  int64   `json:"47"`
 									Four8  int64   `json:"48"`
 									Four9  int64   `json:"49"`
@@ -333,55 +315,46 @@ type Schedule struct {
 									Five0  int64   `json:"50"`
 									Five1  int64   `json:"51"`
 									Five2  int64   `json:"52"`
-									Five3  float64 `json:"53"`
+									Five3  int64   `json:"53"`
 									Five4  int64   `json:"54"`
 									Five5  int64   `json:"55"`
-									Five6  float64 `json:"56"`
-									Five7  float64 `json:"57"`
-									Five8  float64 `json:"58"`
+									Five6  int64   `json:"56"`
+									Five8  int64   `json:"58"`
 									Six    int64   `json:"6"`
 									Six0   float64 `json:"60"`
 									Six1   int64   `json:"61"`
-									Six2   float64 `json:"62"`
-									Six3   float64 `json:"63"`
-									Six4   float64 `json:"64"`
-									Six5   float64 `json:"65"`
-									Six6   float64 `json:"66"`
-									Six7   float64 `json:"67"`
-									Six8   float64 `json:"68"`
-									Six9   float64 `json:"69"`
+									Six2   int64   `json:"62"`
+									Six4   int64   `json:"64"`
+									Six6   int64   `json:"66"`
+									Six7   int64   `json:"67"`
+									Six8   int64   `json:"68"`
 									Seven  int64   `json:"7"`
-									Seven0 float64 `json:"70"`
-									Seven1 float64 `json:"71"`
-									Seven2 float64 `json:"72"`
-									Seven3 float64 `json:"73"`
-									Seven4 float64 `json:"74"`
-									Seven5 float64 `json:"75"`
-									Seven6 float64 `json:"76"`
-									Seven7 float64 `json:"77"`
-									Seven8 float64 `json:"78"`
-									Seven9 float64 `json:"79"`
+									Seven0 int64   `json:"70"`
+									Seven1 int64   `json:"71"`
+									Seven2 int64   `json:"72"`
+									Seven3 int64   `json:"73"`
+									Seven4 int64   `json:"74"`
+									Seven5 int64   `json:"75"`
+									Seven6 int64   `json:"76"`
+									Seven7 int64   `json:"77"`
+									Seven8 int64   `json:"78"`
 									Eight  int64   `json:"8"`
-									Eight0 float64 `json:"80"`
-									Eight1 float64 `json:"81"`
-									Eight2 float64 `json:"82"`
-									Eight3 float64 `json:"83"`
-									Eight4 float64 `json:"84"`
-									Eight5 float64 `json:"85"`
-									Eight6 float64 `json:"86"`
-									Eight7 float64 `json:"87"`
-									Eight8 float64 `json:"88"`
+									Eight0 int64   `json:"80"`
+									Eight1 int64   `json:"81"`
+									Eight3 int64   `json:"83"`
+									Eight4 int64   `json:"84"`
+									Eight5 int64   `json:"85"`
+									Eight6 int64   `json:"86"`
+									Eight7 int64   `json:"87"`
+									Eight8 int64   `json:"88"`
 									Eight9 int64   `json:"89"`
 									Nine   int64   `json:"9"`
 									Nine1  int64   `json:"91"`
 									Nine2  int64   `json:"92"`
-									Nine3  float64 `json:"93"`
-									Nine4  float64 `json:"94"`
-									Nine5  float64 `json:"95"`
-									Nine6  float64 `json:"96"`
-									Nine7  float64 `json:"97"`
-									Nine8  float64 `json:"98"`
-									Nine9  float64 `json:"99"`
+									Nine4  int64   `json:"94"`
+									Nine5  int64   `json:"95"`
+									Nine6  int64   `json:"96"`
+									Nine9  int64   `json:"99"`
 								} `json:"stats"`
 							} `json:"stats"`
 							UniverseID int64 `json:"universeId"`
@@ -602,43 +575,35 @@ type Schedule struct {
 							} `json:"rankings"`
 							Stats []struct {
 								AppliedStats struct {
-									One01  float64 `json:"101"`
-									One02  float64 `json:"102"`
-									One03  float64 `json:"103"`
-									One04  float64 `json:"104"`
+									One03  int64   `json:"103"`
+									One04  int64   `json:"104"`
 									One23  int64   `json:"123"`
 									One29  int64   `json:"129"`
 									One30  int64   `json:"130"`
 									One32  int64   `json:"132"`
 									One33  int64   `json:"133"`
 									One35  int64   `json:"135"`
-									One9   float64 `json:"19"`
-									Two0   float64 `json:"20"`
+									Two0   int64   `json:"20"`
 									Two4   float64 `json:"24"`
-									Two5   float64 `json:"25"`
-									Two6   float64 `json:"26"`
+									Two5   int64   `json:"25"`
+									Two6   int64   `json:"26"`
 									Three  float64 `json:"3"`
-									Four   float64 `json:"4"`
-									Four2  float64 `json:"42"`
-									Four3  float64 `json:"43"`
-									Four4  float64 `json:"44"`
-									Five3  float64 `json:"53"`
-									Six3   float64 `json:"63"`
-									Seven2 float64 `json:"72"`
-									Seven4 float64 `json:"74"`
-									Seven7 float64 `json:"77"`
-									Eight0 float64 `json:"80"`
-									Eight5 float64 `json:"85"`
-									Eight6 float64 `json:"86"`
+									Four   int64   `json:"4"`
+									Four2  int64   `json:"42"`
+									Four3  int64   `json:"43"`
+									Five3  int64   `json:"53"`
+									Seven2 int64   `json:"72"`
+									Seven4 int64   `json:"74"`
+									Seven7 int64   `json:"77"`
+									Eight0 int64   `json:"80"`
+									Eight5 int64   `json:"85"`
+									Eight6 int64   `json:"86"`
 									Nine0  int64   `json:"90"`
 									Nine1  int64   `json:"91"`
 									Nine2  int64   `json:"92"`
-									Nine3  float64 `json:"93"`
-									Nine5  float64 `json:"95"`
-									Nine6  float64 `json:"96"`
-									Nine7  float64 `json:"97"`
-									Nine8  float64 `json:"98"`
-									Nine9  float64 `json:"99"`
+									Nine5  int64   `json:"95"`
+									Nine6  int64   `json:"96"`
+									Nine9  int64   `json:"99"`
 								} `json:"appliedStats"`
 								AppliedTotal    float64 `json:"appliedTotal"`
 								ID              string  `json:"id"`
@@ -649,83 +614,72 @@ type Schedule struct {
 								StatSplitTypeID int64   `json:"statSplitTypeId"`
 								Stats           struct {
 									Zero   int64   `json:"0"`
-									One    float64 `json:"1"`
+									One    int64   `json:"1"`
 									One0   int64   `json:"10"`
 									One00  int64   `json:"100"`
-									One01  float64 `json:"101"`
-									One02  float64 `json:"102"`
-									One03  float64 `json:"103"`
-									One04  float64 `json:"104"`
-									One05  float64 `json:"105"`
-									One06  float64 `json:"106"`
+									One03  int64   `json:"103"`
+									One04  int64   `json:"104"`
+									One05  int64   `json:"105"`
+									One06  int64   `json:"106"`
 									One07  int64   `json:"107"`
 									One08  int64   `json:"108"`
 									One09  int64   `json:"109"`
 									One1   int64   `json:"11"`
 									One10  int64   `json:"110"`
 									One11  int64   `json:"111"`
-									One12  float64 `json:"112"`
-									One13  float64 `json:"113"`
-									One14  float64 `json:"114"`
-									One15  float64 `json:"115"`
+									One12  int64   `json:"112"`
+									One13  int64   `json:"113"`
+									One14  int64   `json:"114"`
+									One15  int64   `json:"115"`
 									One16  int64   `json:"116"`
 									One17  int64   `json:"117"`
 									One18  int64   `json:"118"`
 									One19  int64   `json:"119"`
 									One2   int64   `json:"12"`
-									One20  float64 `json:"120"`
-									One21  int64   `json:"121"`
+									One20  int64   `json:"120"`
 									One22  int64   `json:"122"`
 									One23  int64   `json:"123"`
 									One26  int64   `json:"126"`
-									One27  float64 `json:"127"`
+									One27  int64   `json:"127"`
 									One29  int64   `json:"129"`
 									One3   int64   `json:"13"`
 									One30  int64   `json:"130"`
-									One31  int64   `json:"131"`
 									One32  int64   `json:"132"`
 									One33  int64   `json:"133"`
 									One35  int64   `json:"135"`
 									One37  int64   `json:"137"`
 									One4   int64   `json:"14"`
-									One5   float64 `json:"15"`
+									One5   int64   `json:"15"`
 									One55  int64   `json:"155"`
 									One56  int64   `json:"156"`
-									One6   float64 `json:"16"`
-									One60  float64 `json:"160"`
-									One7   float64 `json:"17"`
-									One8   float64 `json:"18"`
-									One9   float64 `json:"19"`
+									One6   int64   `json:"16"`
+									One7   int64   `json:"17"`
 									Two    int64   `json:"2"`
-									Two0   float64 `json:"20"`
+									Two0   int64   `json:"20"`
 									Two1   float64 `json:"21"`
 									Two2   int64   `json:"22"`
-									Two3   float64 `json:"23"`
-									Two4   float64 `json:"24"`
-									Two5   float64 `json:"25"`
-									Two6   float64 `json:"26"`
+									Two3   int64   `json:"23"`
+									Two4   int64   `json:"24"`
+									Two5   int64   `json:"25"`
+									Two6   int64   `json:"26"`
 									Two7   int64   `json:"27"`
 									Two8   int64   `json:"28"`
 									Two9   int64   `json:"29"`
-									Three  float64 `json:"3"`
+									Three  int64   `json:"3"`
 									Three0 int64   `json:"30"`
 									Three1 int64   `json:"31"`
 									Three2 int64   `json:"32"`
 									Three3 int64   `json:"33"`
 									Three4 int64   `json:"34"`
-									Three5 float64 `json:"35"`
-									Three6 float64 `json:"36"`
-									Three7 float64 `json:"37"`
-									Three8 float64 `json:"38"`
+									Three7 int64   `json:"37"`
 									Three9 float64 `json:"39"`
-									Four   float64 `json:"4"`
+									Four   int64   `json:"4"`
 									Four0  int64   `json:"40"`
-									Four1  float64 `json:"41"`
-									Four2  float64 `json:"42"`
-									Four3  float64 `json:"43"`
-									Four4  float64 `json:"44"`
-									Four5  float64 `json:"45"`
-									Four6  float64 `json:"46"`
+									Four1  int64   `json:"41"`
+									Four2  int64   `json:"42"`
+									Four3  int64   `json:"43"`
+									Four5  int64   `json:"45"`
+									Four6  int64   `json:"46"`
 									Four7  int64   `json:"47"`
 									Four8  int64   `json:"48"`
 									Four9  int64   `json:"49"`
@@ -733,55 +687,46 @@ type Schedule struct {
 									Five0  int64   `json:"50"`
 									Five1  int64   `json:"51"`
 									Five2  int64   `json:"52"`
-									Five3  float64 `json:"53"`
+									Five3  int64   `json:"53"`
 									Five4  int64   `json:"54"`
 									Five5  int64   `json:"55"`
-									Five6  float64 `json:"56"`
-									Five7  float64 `json:"57"`
-									Five8  float64 `json:"58"`
+									Five6  int64   `json:"56"`
+									Five8  int64   `json:"58"`
 									Six    int64   `json:"6"`
-									Six0   float64 `json:"60"`
+									Six0   int64   `json:"60"`
 									Six1   int64   `json:"61"`
-									Six2   float64 `json:"62"`
-									Six3   float64 `json:"63"`
-									Six4   float64 `json:"64"`
-									Six5   float64 `json:"65"`
-									Six6   float64 `json:"66"`
-									Six7   float64 `json:"67"`
-									Six8   float64 `json:"68"`
-									Six9   float64 `json:"69"`
+									Six2   int64   `json:"62"`
+									Six4   int64   `json:"64"`
+									Six5   int64   `json:"65"`
+									Six6   int64   `json:"66"`
+									Six7   int64   `json:"67"`
+									Six8   int64   `json:"68"`
+									Six9   int64   `json:"69"`
 									Seven  int64   `json:"7"`
-									Seven0 float64 `json:"70"`
-									Seven1 float64 `json:"71"`
-									Seven2 float64 `json:"72"`
-									Seven3 float64 `json:"73"`
-									Seven4 float64 `json:"74"`
-									Seven5 float64 `json:"75"`
-									Seven6 float64 `json:"76"`
-									Seven7 float64 `json:"77"`
-									Seven8 float64 `json:"78"`
-									Seven9 float64 `json:"79"`
+									Seven1 int64   `json:"71"`
+									Seven2 int64   `json:"72"`
+									Seven3 int64   `json:"73"`
+									Seven4 int64   `json:"74"`
+									Seven5 int64   `json:"75"`
+									Seven6 int64   `json:"76"`
+									Seven7 int64   `json:"77"`
+									Seven8 int64   `json:"78"`
 									Eight  int64   `json:"8"`
-									Eight0 float64 `json:"80"`
-									Eight1 float64 `json:"81"`
-									Eight2 float64 `json:"82"`
-									Eight3 float64 `json:"83"`
-									Eight4 float64 `json:"84"`
-									Eight5 float64 `json:"85"`
-									Eight6 float64 `json:"86"`
-									Eight7 float64 `json:"87"`
-									Eight8 float64 `json:"88"`
+									Eight0 int64   `json:"80"`
+									Eight1 int64   `json:"81"`
+									Eight3 int64   `json:"83"`
+									Eight4 int64   `json:"84"`
+									Eight5 int64   `json:"85"`
+									Eight6 int64   `json:"86"`
+									Eight7 int64   `json:"87"`
 									Nine   int64   `json:"9"`
 									Nine0  int64   `json:"90"`
 									Nine1  int64   `json:"91"`
 									Nine2  int64   `json:"92"`
-									Nine3  float64 `json:"93"`
-									Nine4  float64 `json:"94"`
-									Nine5  float64 `json:"95"`
-									Nine6  float64 `json:"96"`
-									Nine7  float64 `json:"97"`
-									Nine8  float64 `json:"98"`
-									Nine9  float64 `json:"99"`
+									Nine4  int64   `json:"94"`
+									Nine5  int64   `json:"95"`
+									Nine6  int64   `json:"96"`
+									Nine9  int64   `json:"99"`
 								} `json:"stats"`
 							} `json:"stats"`
 							UniverseID int64 `json:"universeId"`
