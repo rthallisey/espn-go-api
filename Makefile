@@ -4,3 +4,6 @@ run:
 
 generateAPI:
 	./hack/gen-api.sh
+
+plot:
+	./plotLeague.py
