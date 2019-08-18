@@ -16,8 +16,9 @@ import chart_studio.plotly as plot
 import plotly.graph_objects as go
 
 
-RESULTS_DIR="results"
-
+RESULTS_DIR=PROJECT_ROOT + "/results"
+GO_PATH=os.environ['GOPATH']
+BLOG_PATH=os.path.join(GO_PATH, "src/github.com/rthallisey/blog")
 
 def buildPlot(title, filename, data, X, Y):
     fig = go.Figure(data=data)
@@ -51,7 +52,9 @@ def buildPlot(title, filename, data, X, Y):
             )
         )
     )
-    plotly.offline.plot(fig, filename=filename)
+    d = plotly.offline.plot(fig, filename=filename, output_type='div')
+    with open(os.path.join(BLOG_PATH, "static/html", filename+".html"), "w") as f:
+        f.write(d)
 
 with open(RESULTS_DIR + "/BenchPoints.json") as json_file:
     data = json.load(json_file)
@@ -61,7 +64,7 @@ with open(RESULTS_DIR + "/BenchPoints.json") as json_file:
         y=[str(v) for v in data.values()],
         name="Weekly Bench Points Scored")]
 
-    buildPlot("Weekly Bench Points Scored", "weekly-bench-points.html", benchGraph, "Team Owner", "Points")
+    buildPlot("Weekly Bench Points Scored", "weekly-bench-points", benchGraph, "Team Owner", "Points")
 
 with open(RESULTS_DIR + "/MVPCount.json") as json_file:
     data = json.load(json_file)
@@ -71,6 +74,6 @@ with open(RESULTS_DIR + "/MVPCount.json") as json_file:
         y=[str(v) for v in data.values()],
         name="Average MVPs")]
 
-    buildPlot("Average Number of MVPs", "avg-mvps.html", AvgMVPsGraph, "Team Owner", "# of MVPs")
+    buildPlot("Average Number of MVPs", "avg-mvps", AvgMVPsGraph, "Team Owner", "# of MVPs")
 
 sys.exit(0)
