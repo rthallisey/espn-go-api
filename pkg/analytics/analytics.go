@@ -28,7 +28,7 @@ func Start(hc espnv3.LeagueV3, weekly []espnv3.LeagueV3) error {
 			posAVG := teams.TeamAvgPosScore(team.PrimaryOwner, p)
 			fmt.Printf("Team %s average points for position %s: %v\n", members[team.PrimaryOwner], pos, posAVG)
 			exportAvgPosScoreData[pos] = posAVG
-			MapStringFloatToJson("TeamAvgPtsPerPosition/"+members[team.PrimaryOwner]+" pos.json", exportAvgPosScoreData)
+			MapStringFloatToJson("TeamAvgPtsPerPosition/"+members[team.PrimaryOwner]+".json", exportAvgPosScoreData)
 		}
 		fmt.Printf("\n")
 	}
@@ -154,13 +154,13 @@ func benchPoints(teams espnv3.Team, hc espnv3.LeagueV3) {
 func teamPlayerMostPoints(teams espnv3.Team, hc espnv3.LeagueV3) {
 	members := hc.LeagueMembers()
 
+	exportData := map[string]float64{}
 	for _, team := range teams.Generated.Teams {
-		exportData := map[string]float64{}
 		highestScorer, highestScore := teams.TeamPlayerMostPoints(team.PrimaryOwner)
 
 		fmt.Printf("Team %s highest scorer is %s with %v points\n", members[team.PrimaryOwner], highestScorer, highestScore)
-		exportData[highestScorer] = highestScore
-		MapStringFloatToJson("playerMostPoints/"+members[team.PrimaryOwner]+" HighestScorer.json", exportData)
+		exportData[highestScorer+" ("+members[team.PrimaryOwner]+")"] = highestScore
 	}
+	MapStringFloatToJson("playerMostPoints.json", exportData)
 
 }
