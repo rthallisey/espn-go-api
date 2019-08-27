@@ -36,11 +36,15 @@ func Start(hc espnv3.LeagueV3, weekly []espnv3.LeagueV3) error {
 	teamPlayerMostPoints(teams, hc)
 	fmt.Printf("\n")
 
+	exportAvgPtsPerPosData := map[string]float64{}
 	for _, pos := range teams.PositionList() {
 		p, _ := teams.PositionStringToID(pos)
 		posAVG := teams.AvgPosScore(p)
+		exportAvgPtsPerPosData[pos] = posAVG
 		fmt.Printf("%s average points: %v\n", pos, posAVG)
 	}
+	MapStringFloatToJson("TeamPtsPerPosition/Average.json", exportAvgPtsPerPosData)
+
 	// rosters := teams.AllRosters()
 	// for rosterID, _ := range rosters {
 	// 	fmt.Println(members[rosterID])
@@ -178,7 +182,7 @@ func benchPoints(teams espnv3.Team, hc espnv3.LeagueV3) {
 		fmt.Printf("Team %s Bench Points: %v\n", members[team.PrimaryOwner], benchPts)
 		exportData[members[team.PrimaryOwner]] = benchPts
 	}
-	MapStringFloatToJson("BencnhPoints.json", exportData)
+	MapStringFloatToJson("BenchPoints.json", exportData)
 }
 
 func teamPlayerMostWins(teams espnv3.Team, hc espnv3.LeagueV3) {
