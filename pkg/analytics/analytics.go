@@ -28,7 +28,7 @@ func Start(hc espnv3.LeagueV3, weekly []espnv3.LeagueV3) error {
 			posAVG := teams.TeamAvgPosScore(team.PrimaryOwner, p)
 			fmt.Printf("Team %s average points for position %s: %v\n", members[team.PrimaryOwner], pos, posAVG)
 			exportAvgPosScoreData[pos] = posAVG
-			MapStringFloatToJson("TeamAvgPtsPerPosition/"+members[team.PrimaryOwner]+".json", exportAvgPosScoreData)
+			MapStringFloatToJson("TeamPtsPerPosition/"+members[team.PrimaryOwner]+".json", exportAvgPosScoreData)
 		}
 		fmt.Printf("\n")
 	}
@@ -74,6 +74,9 @@ func findEveryTeamMVP(schedule espnv3.Schedule, teams espnv3.Team, l espnv3.Leag
 		// winScore -> [teamID][]scoreDiff
 		winScore := schedule.TeamGameWinScore(int(team.ID))
 
+		// weeks are zeroed in the Team API.  ScoringPeriodId is not
+		// zeroed from the Schedule API.
+
 		data, err := teams.TeamMVP(int(team.ID), winScore[int(team.ID)])
 		if err != nil {
 			return err
@@ -100,11 +103,20 @@ func findEveryTeamMVP(schedule espnv3.Schedule, teams espnv3.Team, l espnv3.Leag
 			return err
 		}
 
+		byWin := findMVPByWin(t)
+
+		MapStringIntToJson("TeamMVPByWin/" + members[id] + ".json", byWin)
+
+		for play, wins := range byWin {
+			fmt.Printf("Team MVP: %v with %v wins\n", play, wins)
+		}
+
 		fmt.Printf("Number of players with MVPs: %d\n", count)
 		exportCountData[members[id]] = count
 
 		fmt.Printf("Total wins: %v\n", record.Wins)
 		avgMVP := float64(mvpSum) / float64(record.Wins)
+
 		fmt.Printf("Average MVPs per win: %v\n", avgMVP)
 		exportAvgMVPData[members[id]] = avgMVP
 
@@ -116,13 +128,31 @@ func findEveryTeamMVP(schedule espnv3.Schedule, teams espnv3.Team, l espnv3.Leag
 		fmt.Printf("Normalized MVPs Per win: %v\n\n", normMvpsPerWin)
 		exportNormMVPData[members[id]] = normMvpsPerWin
 	}
-
 	MapStringIntToJson("MVPCount.json", exportCountData)
 	MapStringFloatToJson("AvgMVPs.json", exportAvgMVPData)
 	MapStringFloatToJson("MVPsPerWin.json", exportMVPPerWinData)
 	MapStringFloatToJson("NormalizedMVPsPerWin.json", exportNormMVPData)
 
 	return nil
+}
+
+// Return list with MVP(s) that had the most wins
+func findMVPByWin(byWin map[string]int) map[string]int {
+	mvps := map[string]int{}
+
+	// n * n :(
+	max := 0
+ 	for _, winTotal := range byWin {
+		if winTotal >= max {
+			max = winTotal
+		}
+	}
+ 	for player, winTotal := range byWin {
+		if winTotal == max {
+			mvps[player] = winTotal
+		}
+	}
+	return mvps
 }
 
 func benchPoints(teams espnv3.Team, hc espnv3.LeagueV3) {
@@ -148,7 +178,11 @@ func benchPoints(teams espnv3.Team, hc espnv3.LeagueV3) {
 		fmt.Printf("Team %s Bench Points: %v\n", members[team.PrimaryOwner], benchPts)
 		exportData[members[team.PrimaryOwner]] = benchPts
 	}
-	MapStringFloatToJson("BenchPoints.json", exportData)
+	MapStringFloatToJson("BencnhPoints.json", exportData)
+}
+
+func teamPlayerMostWins(teams espnv3.Team, hc espnv3.LeagueV3) {
+
 }
 
 func teamPlayerMostPoints(teams espnv3.Team, hc espnv3.LeagueV3) {

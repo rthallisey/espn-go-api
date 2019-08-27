@@ -174,7 +174,11 @@ func (t Team) TeamMVP(teamID int, weeksWonScore []scoreDiff) (map[string]int, er
 	}
 
 	for _, score := range weeksWonScore {
-		playerWeekPoints, err := t.PlayerWeekScore(uuid, score.scoringPeriodID)
+		// weeks are zeroed in the Team API.  ScoringPeriodId is not
+		// zeroed from the Schedule API.
+		week := score.scoringPeriodID - 1
+
+		playerWeekPoints, err := t.PlayerWeekScore(uuid, week)
 		if err != nil {
 			return nil, err
 		}
@@ -227,7 +231,6 @@ func (t Team) PlayerWeekScore(uuid string, week int) (map[string]playerPoints, e
 				//       statSplitId  = 0
 				for _, statSource := range player.PlayerPoolEntry.Player.Stats {
 					trackPoints.AcquisitionType = player.AcquisitionType
-
 					if player.LineupSlotID == 20 {
 						trackPoints.Bench = true
 					} else {

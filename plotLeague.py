@@ -164,9 +164,9 @@ with open(RESULTS_DIR + "/playerMostPoints.json") as json_file:
     MostPointsGraph = [go.Bar(
         x=[str(v) for v in data.keys()],
         y=[str(v) for v in data.values()],
-        name="Team MVP")]
+        name="MVP by Points")]
 
-    buildPlot("Team MVP", "team-mvp", MostPointsGraph, "Team Owner", "Points")
+    buildPlot("MVP by Points", "team-mvp-points", MostPointsGraph, "Team Owner", "Points")
 
 with open(RESULTS_DIR + "/AvgMVPs.json") as json_file:
     data = json.load(json_file)
@@ -178,16 +178,41 @@ with open(RESULTS_DIR + "/AvgMVPs.json") as json_file:
 
     buildPlot("Average MVP", "avg-mvps", MostPointsGraph, "Team Owner", "MVPs")
 
-t = buildTrace("Average Points Per Position", "Team Owner", "Points")
-for filename in os.listdir(RESULTS_DIR + "/TeamAvgPtsPerPosition/"):
-    with open(RESULTS_DIR + "/TeamAvgPtsPerPosition/" + filename) as json_file:
+t = buildTrace("Team Points Per Position", "Team Owner", "Points")
+for filename in os.listdir(RESULTS_DIR + "/TeamPtsPerPosition/"):
+    with open(RESULTS_DIR + "/TeamPtsPerPosition/" + filename) as json_file:
         data = json.load(json_file)
         t.add_trace(go.Scatter(x=[str(v) for v in data.keys()], y=[str(v) for v in data.values()],
                                mode='lines+markers',
                                name=filename.replace(".json", "")))
 
-d = plotly.offline.plot(t, filename="avg-pts-per-position.html", output_type='div')
-with open(os.path.join(BLOG_PATH, "static/html", "avg-pts-per-position.html"), "w") as f:
+d = plotly.offline.plot(t, filename="team-pts-per-position.html", output_type='div')
+with open(os.path.join(BLOG_PATH, "static/html", "team-pts-per-position.html"), "w") as f:
     f.write(d)
+
+
+MVPsByWinsGraph = []
+for filename in os.listdir(RESULTS_DIR + "/TeamMVPByWin/"):
+    names = ""
+    wins = ""
+    with open(RESULTS_DIR + "/TeamMVPByWin/" + filename) as json_file:
+        data = json.load(json_file)
+
+        for k in data.keys():
+            if names is "" :
+                names += k
+            else:
+                names += " & " + k
+
+        for v in data.values():
+            wins = v
+            break
+
+    MVPsByWinsGraph.append(go.Bar(
+        x=[names],
+        y=[wins],
+        name=filename.replace(".json", "")))
+
+buildPlot("MVPs by Wins", "mvps-by-wins", MVPsByWinsGraph, "Team Owner", "Games Won")
 
 sys.exit(0)
