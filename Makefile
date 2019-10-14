@@ -6,4 +6,4 @@ generateAPI:
 	./hack/gen-api.sh
 
 plot:
-	./plotLeague.py
+	./plot/plot.py
