@@ -2,6 +2,14 @@
 package generated
 
 type League struct {
+	Details []struct {
+		Message      string      `json:"message"`
+		MetaData     interface{} `json:"metaData"`
+		Resolution   interface{} `json:"resolution"`
+		ShortMessage string      `json:"shortMessage"`
+		Type         string      `json:"type"`
+	} `json:"details"`
+	Messages []string `json:"messages"`
 	DraftDetail struct {
 		CompleteDate int64 `json:"completeDate"`
 		Drafted      bool  `json:"drafted"`
